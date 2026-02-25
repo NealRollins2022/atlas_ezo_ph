@@ -1,0 +1,13 @@
+&uart1 {
+  status = "okay";
+  current-speed = <9600>;
+  pinctrl-0 = <&uart1_default>;
+  pinctrl-1 = <&uart1_sleep>;
+  pinctrl-names = "default", "sleep";
+
+  ezo_ph: ezo-ph {
+    compatible = "atlas,ezo-ph";
+    interface = "uart";  // Selects UART mode
+    label = "EZO_PH";
+  };
+};

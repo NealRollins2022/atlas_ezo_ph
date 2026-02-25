@@ -1,0 +1,19 @@
+description: Atlas EZO-pH sensor (UART or I2C)
+compatible: "atlas,ezo-ph"
+properties:
+  interface:
+    type: string
+    required: true
+    enum:
+      - "uart"
+      - "i2c"
+    description: Interface type (uart or i2c)
+  reg:
+    type: int
+    description: I2C address (only if interface = "i2c")
+  current-speed:
+    type: int
+    default: 9600
+    description: UART baud rate (only if interface = "uart")
+
+on-bus: [i2c, uart]  # Allows DT_INST_ON_BUS to detect

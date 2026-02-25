@@ -1,0 +1,7 @@
+name: atlas_ezo_ph
+build:
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    dts_root: .
+

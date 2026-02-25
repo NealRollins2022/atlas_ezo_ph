@@ -1,0 +1,6 @@
+config PH_SENSOR
+  bool "Enable Atlas EZO-pH sensor driver"
+  default y if SENSOR
+  depends on (I2C || SERIAL) && SENSOR
+  help
+    Driver for Atlas Scientific EZO-pH sensor (UART/I2C).

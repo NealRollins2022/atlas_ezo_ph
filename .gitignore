@@ -1,0 +1,18 @@
+# Zephyr / West build output
+build/
+zephyr/build/
+**/build/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db

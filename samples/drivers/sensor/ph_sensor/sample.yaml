@@ -1,0 +1,13 @@
+tests:
+  drivers.video.arducam_nord.build:
+    tags:
+      - video
+      - camera
+      - drivers
+      - sysbuild
+
+    platform_allow:
+      - nrf5340dk_nrf5340_cpuapp
+
+    integration_platforms:
+      - nrf5340dk_nrf5340_cpuapp
