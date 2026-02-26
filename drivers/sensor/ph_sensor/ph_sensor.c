@@ -8,7 +8,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/logging/log.h>
 #include <string.h>
-#include <drivers/sensor/ph_sensor.h>
+#include "ph_sensor.h"
 
 LOG_MODULE_REGISTER(ph_sensor, CONFIG_SENSOR_LOG_LEVEL);
 
@@ -23,6 +23,7 @@ struct ph_sensor_config {
     const struct device *uart;
   };
 };
+
 static int send_command(const struct device *dev, const char *cmd) {
   const struct ph_sensor_config *config = dev->config;
 
@@ -44,9 +45,9 @@ static int read_response(const struct device *dev, uint8_t *buf, size_t len) {
   } else {
     size_t idx = 0;
     uint32_t start = k_uptime_get_32();
-    while (idx < len && (k_uptime_get_32() - start) < 1000) {  // Timeout 1s
+    while (idx < len && (k_uptime_get_32() - start) < 1000) {
       if (uart_poll_in(config->uart, &buf[idx]) == 0) {
-        if (buf[idx] == '\0' || buf[idx] == '\r') break;  // Terminate on CR or NULL
+        if (buf[idx] == '\0' || buf[idx] == '\r') break;
         idx++;
       }
     }
@@ -60,7 +61,7 @@ static int ph_sensor_sample_fetch(const struct device *dev) {
   uint8_t buf[20];
 
   send_command(dev, "R");
-  k_sleep(K_MSEC(600));  // Standard read delay
+  k_sleep(K_MSEC(600));
 
   int ret = read_response(dev, buf, sizeof(buf));
   if (ret < 0) return ret;
@@ -71,17 +72,17 @@ static int ph_sensor_sample_fetch(const struct device *dev) {
 
 static int ph_sensor_channel_get(const struct device *dev, enum sensor_channel chan, struct sensor_value *val) {
   struct ph_sensor_data *data = dev->data;
-  if (chan != PH_SENSOR_CHAN_PH) return -ENOTSUP;
+  if (chan != (enum sensor_channel)PH_SENSOR_CHAN_PH) return -ENOTSUP;  // Cast to silence enum warning
   val->val1 = (int32_t)data->ph_value;
   val->val2 = (int32_t)((data->ph_value - val->val1) * 1000000);
   return 0;
 }
 
 static int ph_sensor_attr_set(const struct device *dev, enum sensor_channel chan, enum sensor_attribute attr, const struct sensor_value *val) {
-  if (attr == PH_SENSOR_ATTR_CALIBRATION) {
+  if (attr == (enum sensor_attribute)PH_SENSOR_ATTR_CALIBRATION) {  // Cast to silence enum warning
     char cmd[20];
-    float cal_val = val->val1 + (val->val2 / 1000000.0f);
-    switch (val->val1) {  // 0=low, 1=mid, 2=high
+    double cal_val = (double)(val->val1 + (val->val2 / 1000000.0f));  // Cast to double for %.2f
+    switch (val->val1) {
       case 0: snprintk(cmd, sizeof(cmd), "Cal,low,%.2f", cal_val); break;
       case 1: snprintk(cmd, sizeof(cmd), "Cal,mid,%.2f", cal_val); break;
       case 2: snprintk(cmd, sizeof(cmd), "Cal,high,%.2f", cal_val); break;
@@ -90,12 +91,11 @@ static int ph_sensor_attr_set(const struct device *dev, enum sensor_channel chan
     send_command(dev, cmd);
     k_sleep(K_MSEC(600));
     return 0;
-  } else if (attr == PH_SENSOR_ATTR_MODE_SWITCH) {
-    // Example: val->val1 = I2C address
+  } else if (attr == (enum sensor_attribute)PH_SENSOR_ATTR_MODE_SWITCH) {
     char cmd[20];
     snprintk(cmd, sizeof(cmd), "I2C,%d", val->val1);
     send_command(dev, cmd);
-    k_sleep(K_MSEC(300));  // Switch delay
+    k_sleep(K_MSEC(300));
     send_command(dev, "Plock,1");
     return 0;
   }
@@ -109,6 +109,7 @@ static const struct sensor_driver_api ph_sensor_api = {
 };
 
 static int ph_sensor_init(const struct device *dev) {
+  ARG_UNUSED(dev);  // Suppress unused warning if not needed, or add init logic
   const struct ph_sensor_config *config = dev->config;
 
   if (config->is_i2c) {
@@ -122,7 +123,7 @@ static int ph_sensor_init(const struct device *dev) {
 #define PH_SENSOR_DEFINE(inst)                                               \
   static struct ph_sensor_data ph_sensor_data_##inst;                        \
   static const struct ph_sensor_config ph_sensor_config_##inst = {           \
-    .is_i2c = strcmp(DT_INST_PROP(inst, interface), "i2c") == 0,             \
+    .is_i2c = DT_INST_ON_BUS(inst, i2c),                                     \
     {                                                                        \
       .i2c = I2C_DT_SPEC_INST_GET(inst),                                     \
     }                                                                        \
