@@ -1,0 +1,25 @@
+# I2C bus binding for Atlas EZO-pH sensor.
+#
+# Zephyr selects this file automatically when the DT node's parent bus
+# is I2C, matched by compatible + on-bus together.
+#
+# Shared base properties are in atlas,ezo-ph.yaml (no compatible declared
+# there — it is a pure mixin to avoid conflicting with this file).
+
+description: Atlas EZO-pH sensor (I2C mode)
+
+compatible: "atlas,ezo-ph"
+
+include: atlas,ezo-ph.yaml
+
+on-bus: i2c
+
+properties:
+  reg:
+    type: int
+    required: true
+    description: |
+      I2C address of the EZO-pH sensor.
+      Default Atlas EZO-pH I2C address is 0x63 (99 decimal).
+      Can be changed via the I2C,<addr> UART command before locking
+      with Plock,1 and power-cycling.

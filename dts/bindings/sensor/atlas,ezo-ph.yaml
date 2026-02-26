@@ -1,0 +1,13 @@
+# Base binding for Atlas EZO-pH sensor.
+#
+# This file is a shared mixin — it does NOT declare 'compatible' or 'on-bus'.
+# It is included by atlas,ezo-ph-i2c.yaml and atlas,ezo-ph-uart.yaml which
+# each declare the compatible string and their respective on-bus value.
+# Zephyr selects the correct bus-specific file automatically based on the
+# parent bus of the DT node.
+#
+# Do not reference this file directly in overlays.
+
+description: Atlas EZO-pH sensor base properties
+
+include: base.yaml

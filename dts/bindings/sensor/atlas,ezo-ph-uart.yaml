@@ -1,0 +1,18 @@
+# UART bus binding for Atlas EZO-pH sensor.
+#
+# Zephyr selects this file automatically when the DT node's parent bus
+# is UART, matched by compatible + on-bus together.
+#
+# Shared base properties are in atlas,ezo-ph.yaml (no compatible declared
+# there — it is a pure mixin to avoid conflicting with this file).
+#
+# Note: baud rate (current-speed = <9600>) belongs on the parent &uart1
+# controller node in the overlay, not here. It is a bus property.
+
+description: Atlas EZO-pH sensor (UART mode)
+
+compatible: "atlas,ezo-ph"
+
+include: atlas,ezo-ph.yaml
+
+on-bus: uart
