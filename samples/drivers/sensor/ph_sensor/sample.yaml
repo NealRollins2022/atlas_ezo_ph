@@ -1,9 +1,9 @@
 tests:
-  drivers.video.arducam_nord.build:
+  drivers.sensor.ph_sensor.build:
     tags:
-      - video
-      - camera
-      - drivers
+      - i2c
+      - sensor
+      - ph_sensor
       - sysbuild
 
     platform_allow:
@@ -11,3 +11,4 @@ tests:
 
     integration_platforms:
       - nrf5340dk_nrf5340_cpuapp
+
