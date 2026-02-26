@@ -1,18 +1,23 @@
-/* Device Tree Overlay for Atlas EZO-pH Sensor (I2C Mode)
- * For nRF5340 DK
- * Copy to boards/nrf5340dk_nrf5340_cpuapp.overlay
+/*
+ * Default board overlay for nRF5340 DK (cpuapp core).
+ * Configures the Atlas EZO-pH sensor in I2C mode at address 0x63.
+ *
+ * This is the overlay Zephyr picks up automatically for this board.
+ * It is equivalent to nrf5340dk_i2c.overlay — both are kept so that
+ * the named overlay can be selected explicitly if needed.
  */
 
 &i2c1 {
-  status = "okay";
-  pinctrl-0 = <&i2c1_default>;
-  pinctrl-1 = <&i2c1_sleep>;
-  pinctrl-names = "default", "sleep";
-  clock-frequency = <I2C_BITRATE_STANDARD>;
+	status = "okay";
+	pinctrl-0 = <&i2c1_default>;
+	pinctrl-1 = <&i2c1_sleep>;
+	pinctrl-names = "default", "sleep";
+	clock-frequency = <I2C_BITRATE_STANDARD>;
 
-  ezo_ph: ezo-ph@63 {
-    compatible = "atlas,ezo-ph";
-    reg = <0x63>;
-    label = "EZO_PH";
-  };
+	ezo_ph: ezo-ph@63 {
+		compatible = "atlas,ezo-ph";
+		reg = <0x63>;
+		label = "EZO_PH";
+		status = "okay";
+	};
 };
