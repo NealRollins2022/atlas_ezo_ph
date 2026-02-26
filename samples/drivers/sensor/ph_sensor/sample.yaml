@@ -4,11 +4,9 @@ tests:
       - i2c
       - sensor
       - ph_sensor
-      - sysbuild
 
     platform_allow:
       - nrf5340dk_nrf5340_cpuapp
 
     integration_platforms:
       - nrf5340dk_nrf5340_cpuapp
-
