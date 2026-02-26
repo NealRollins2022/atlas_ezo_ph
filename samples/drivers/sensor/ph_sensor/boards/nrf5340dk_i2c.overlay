@@ -1,22 +1,27 @@
-/* Device Tree Overlay for Atlas EZO-pH Sensor (I2C Mode)
- * For nRF5340 DK
- * Sensor must be pre-configured to I2C mode via UART commands first:
- *   - Connect via UART
- *   - Send "I2C,99\r" to switch to I2C address 0x63
- *   - Send "Plock,1\r" to lock protocol
+/*
+ * Named overlay for Atlas EZO-pH sensor in I2C mode on nRF5340 DK.
+ *
+ * Use this overlay when the sensor has already been switched to I2C mode:
+ *   1. Connect via UART
+ *   2. Send "I2C,99\r"  — switch to I2C address 0x63
+ *   3. Send "Plock,1\r" — lock protocol to I2C
+ *   4. Power-cycle the sensor
+ *
+ * This file is identical in content to nrf5340dk_nrf5340_cpuapp.overlay
+ * and is provided as a named alternative for explicit selection.
  */
 
 &i2c1 {
-  status = "okay";
-  pinctrl-0 = <&i2c1_default>;
-  pinctrl-1 = <&i2c1_sleep>;
-  pinctrl-names = "default", "sleep";
-  clock-frequency = <I2C_BITRATE_STANDARD>;
+	status = "okay";
+	pinctrl-0 = <&i2c1_default>;
+	pinctrl-1 = <&i2c1_sleep>;
+	pinctrl-names = "default", "sleep";
+	clock-frequency = <I2C_BITRATE_STANDARD>;
 
-  ezo_ph: ezo-ph@63 {
-    compatible = "atlas,ezo-ph";
-    interface = "i2c";  // Selects I2C mode
-    reg = <0x63>;
-    label = "EZO_PH";
-  };
+	ezo_ph: ezo-ph@63 {
+		compatible = "atlas,ezo-ph";
+		reg = <0x63>;
+		label = "EZO_PH";
+		status = "okay";
+	};
 };
