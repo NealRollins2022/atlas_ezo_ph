@@ -9,6 +9,7 @@ enum ph_sensor_channel {
 
 enum ph_sensor_attribute {
   PH_SENSOR_ATTR_CALIBRATION = SENSOR_ATTR_PRIV_START,
+  PH_SENSOR_ATTR_MODE_SWITCH,  // Added for UART to I2C switch
 };
 
 #endif /* PH_SENSOR_H_ */
