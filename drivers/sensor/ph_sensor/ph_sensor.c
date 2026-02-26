@@ -325,3 +325,4 @@ static int ph_sensor_init(const struct device *dev)
 			      &ph_sensor_api);
 
 DT_INST_FOREACH_STATUS_OKAY(PH_SENSOR_DEFINE)
+
