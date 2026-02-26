@@ -1,13 +1,24 @@
-&uart1 {
-  status = "okay";
-  current-speed = <9600>;
-  pinctrl-0 = <&uart1_default>;
-  pinctrl-1 = <&uart1_sleep>;
-  pinctrl-names = "default", "sleep";
+/*
+ * Overlay for Atlas EZO-pH sensor in UART mode on nRF5340 DK.
+ *
+ * Use this overlay when the sensor is in its factory default UART mode,
+ * or after a power-cycle before switching to I2C.
+ *
+ * current-speed is set here on the bus controller node (&uart1) — it
+ * is a bus property, not a sensor device property, so it does not
+ * appear in the binding file.
+ */
 
-  ezo_ph: ezo-ph {
-    compatible = "atlas,ezo-ph";
-    interface = "uart";  // Selects UART mode
-    label = "EZO_PH";
-  };
+&uart1 {
+	status = "okay";
+	current-speed = <9600>;
+	pinctrl-0 = <&uart1_default>;
+	pinctrl-1 = <&uart1_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	ezo_ph: ezo-ph {
+		compatible = "atlas,ezo-ph";
+		label = "EZO_PH";
+		status = "okay";
+	};
 };
