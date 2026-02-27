@@ -8,7 +8,7 @@
 #include <zephyr/logging/log.h>
 #include <string.h>
 #include <stdio.h>
-#include "ph_sensor.h"
+#include <drivers/sensor/ph_sensor.h>
 
 // Declare the static functions from ph_sensor.c as extern.
 extern int send_command(const struct device *dev, const char *cmd);
