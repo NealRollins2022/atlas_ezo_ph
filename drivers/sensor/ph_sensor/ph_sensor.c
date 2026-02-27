@@ -167,7 +167,7 @@ static int ph_sensor_sample_fetch(const struct device *dev,
 		return ret;
 	}
 
-	k_sleep(K_MSEC(600));
+	    k_sleep(K_MSEC(config->is_i2c ? 900 : 800));
 
 	ret = read_response(dev, buf, sizeof(buf));
 	if (ret < 0) {
@@ -246,7 +246,7 @@ static int ph_sensor_attr_set(const struct device *dev,
 		if (ret < 0) {
 			return ret;
 		}
-		k_sleep(K_MSEC(600));
+	    k_sleep(K_MSEC(config->is_i2c ? 900 : 800));
 		return 0;
 
 	} else if (attr == (enum sensor_attribute)PH_SENSOR_ATTR_MODE_SWITCH) {
