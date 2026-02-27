@@ -9,7 +9,7 @@
 #include <zephyr/logging/log.h>
 #include <string.h>
 #include <stdlib.h>
-#include "ph_sensor.h"
+#include <drivers/sensor/ph_sensor.h>
 
 LOG_MODULE_REGISTER(ph_sensor, CONFIG_SENSOR_LOG_LEVEL);
 
