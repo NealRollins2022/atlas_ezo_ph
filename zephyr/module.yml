@@ -1,7 +1,6 @@
-name: atlas_ezo_ph
+name: ph_sensor
 build:
   cmake: .
   kconfig: Kconfig
   settings:
     dts_root: .
-

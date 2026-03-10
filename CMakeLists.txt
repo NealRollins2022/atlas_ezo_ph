@@ -1,17 +1,21 @@
-# CMakeLists.txt for Arducam module (C:\ncs\v2.7.0\modules\arducam2\CMakeLists.txt)
+# CMakeLists.txt for Arducam module (C:\ncs\v3.2.0\modules\atlas_ezo_ph\)
 
 if(CONFIG_PH_SENSOR)
 
 
-
-
-  # Add include directory for drivers/video/arducam_mega.h
-  target_include_directories(zephyr_interface BEFORE INTERFACE
+# Ensure include directory is always added
+target_include_directories(zephyr_interface BEFORE INTERFACE
     ${ZEPHYR_CURRENT_MODULE_DIR}/include
-  )
+)
 
-  # Include driver source file (updated path)
-  zephyr_library_sources(
-    ${ZEPHYR_CURRENT_MODULE_DIR}/drivers/sensor/ph_sensor/ph_sensor.c
-  )
+# Only compile if the Kconfig symbol is enabled
+zephyr_library_sources_ifdef(
+    CONFIG_PH_SENSOR
+    drivers/sensor/ph_sensor/ph_sensor.c
+)
+
+# Add subdirectory if needed
+if(EXISTS ${ZEPHYR_CURRENT_MODULE_DIR}/drivers/sensor/ph_sensor/CMakeLists.txt)
+    add_subdirectory(drivers/sensor/ph_sensor)
+endif()
 endif()

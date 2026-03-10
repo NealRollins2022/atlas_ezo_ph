@@ -1,6 +1,93 @@
 config PH_SENSOR
-  bool "Enable Atlas EZO-pH sensor driver"
-  default y if SENSOR
-  depends on (I2C || SERIAL) && SENSOR
-  help
-    Driver for Atlas Scientific EZO-pH sensor (UART/I2C).
+	bool "Enable Atlas EZO-pH sensor driver"
+	select SENSOR
+	select LOG
+	select I2C
+	select I2C_NRFX
+	default n
+	help
+	  Atlas Scientific EZO-pH sensor driver.
+	  All dependencies auto-enabled via select.
+
+if PH_SENSOR
+
+choice PH_SENSOR_TRANSPORT
+	prompt "Telemetry transport"
+	default PH_SENSOR_TRANSPORT_MATTER
+
+config PH_SENSOR_TRANSPORT_MATTER
+	bool "Matter/CHIP (network)"
+	select NET_IPV6
+	select NET_UDP
+	select NET_SOCKETS
+	help
+	  Send telemetry via Matter/Thread when network ready.
+
+config PH_SENSOR_TRANSPORT_SERIAL
+	bool "Serial/UART (debug)"
+	help
+	  Output readings to UART.
+
+endchoice
+
+choice PH_SENSOR_MODE
+	prompt "Measurement mode"
+	default PH_SENSOR_MODE_CONTINUOUS
+
+config PH_SENSOR_MODE_CONTINUOUS
+	bool "Continuous (driver thread polls sensor)"
+	help
+	  Driver thread sends "R" repeatedly at interval.
+	  Stores latest reading in ph_value; signals ph_data_ready_sem.
+
+config PH_SENSOR_MODE_ON_DEMAND
+	bool "On-demand (app polls sensor)"
+	help
+	  Application calls sample_fetch() when it needs a reading.
+
+endchoice
+
+config PH_SENSOR_MEASUREMENT_INTERVAL_MS
+	int "Measurement interval (ms)"
+	default 10000
+
+config PH_SENSOR_I2C_READ_TIMEOUT_MS
+	int "I2C read timeout (ms)"
+	default 2000
+	depends on PH_SENSOR_MODE_ON_DEMAND
+
+config PH_SENSOR_RETRY_COUNT
+	int "I2C read retry count"
+	default 5
+
+config PH_SENSOR_RETRY_DELAY_MS
+	int "Retry delay (ms)"
+	default 200
+
+config PH_SENSOR_INIT_PRIORITY
+	int "Device init priority"
+	default 80
+
+config PH_SENSOR_CAL_LOW
+	int "Low calibration point (pH x1000)"
+	default 4000
+
+config PH_SENSOR_CAL_MID
+	int "Mid calibration point (pH x1000)"
+	default 7000
+
+config PH_SENSOR_CAL_HIGH
+	int "High calibration point (pH x1000)"
+	default 10000
+
+config PH_SENSOR_ACQ_THREAD_STACK_SIZE
+	int "Acquisition thread stack (bytes)"
+	default 2048
+	depends on PH_SENSOR_MODE_CONTINUOUS
+
+config PH_SENSOR_ACQ_THREAD_PRIORITY
+	int "Acquisition thread priority"
+	default 10
+	depends on PH_SENSOR_MODE_CONTINUOUS
+
+endif

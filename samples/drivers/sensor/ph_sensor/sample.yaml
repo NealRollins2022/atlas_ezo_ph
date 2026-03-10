@@ -1,12 +1,14 @@
+sample:
+  name: pH Sensor Sample
+  description: Atlas EZO-pH sensor driver sample (Matter + Continuous / Serial + On-Demand)
+
 tests:
   drivers.sensor.ph_sensor.build:
     tags:
       - i2c
       - sensor
       - ph_sensor
-
     platform_allow:
-      - nrf5340dk_nrf5340_cpuapp
-
+      - nrf5340dk/nrf5340/cpuapp
     integration_platforms:
-      - nrf5340dk_nrf5340_cpuapp
+      - nrf5340dk/nrf5340/cpuapp
