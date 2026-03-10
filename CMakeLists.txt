@@ -1,4 +1,4 @@
-# CMakeLists.txt for Arducam module (C:\ncs\v3.2.0\modules\atlas_ezo_ph\)
+# CMakeLists.txt for Arducam module (C:\ncs\v3.2.3\modules\atlas_ezo_ph\)
 
 if(CONFIG_PH_SENSOR)
 
