@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 
 # Add before find_package(Zephyr ...)
-list(APPEND ZEPHYR_EXTRA_MODULES C:/ncs/v3.2.0/modules/atlas_ezo_ph)
+list(APPEND ZEPHYR_EXTRA_MODULES C:/ncs/v3.2.3/modules/atlas_ezo_ph)
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(ph_sensor_sample)
